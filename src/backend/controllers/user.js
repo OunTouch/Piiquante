@@ -9,6 +9,7 @@ const User = require('../models/User');
 //fonction d'enregistrement utilisateur
 exports.signup = (req, res, next) => {
     //fonction asynchrone de hachage du mot de passe
+    console.log(req.body);
     bcrypt.hash(req.body.password, 10)
       .then(hash => {
         //création nouvel utilisateur avec le mot de passe haché, depuis le modèle mongoose

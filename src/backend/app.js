@@ -11,6 +11,9 @@ mongoose.connect('mongodb+srv://OunTouch:CX0BO7OVrc79CKCY@cluster0.z1ozurv.mongo
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
+//utilisation du format json pour express
+app.use(express.json())
+
 //gestion du CORS
 app.use((req, res, next) => {
   //accès à l'api depuis n'importe quelle origine
@@ -21,10 +24,7 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
   next();
 });
-//réponse test
-app.use((req, res) => {
-  res.json({ message: 'test' }); 
-});
+
 //enregistrement du routeur des utilisateurs
 app.use('/api/auth', userRoutes);
 
