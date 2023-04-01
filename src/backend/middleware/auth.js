@@ -1,13 +1,17 @@
+//appel au package jsonwebtoken
 const jwt = require('jsonwebtoken');
- 
+//création de la fonction de vérification du token
 module.exports = (req, res, next) => {
    try {
-       const token = req.headers.authorization.split(' ')[1];
-       const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
-       const userId = decodedToken.userId;
-       req.auth = {
-           userId: userId
-       };
+        //récupération du token depuis le header authorization
+        const token = req.headers.authorization.split(' ')[1];
+        //vérification du token
+        const decodedToken = jwt.verify(token, 'TEST');
+        //ajout id utilisateur du token à l'objet request
+        const userId = decodedToken.userId;
+        req.auth = {
+            userId: userId
+        };
 	next();
    } catch(error) {
        res.status(401).json({ error });
