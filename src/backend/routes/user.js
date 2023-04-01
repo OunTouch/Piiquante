@@ -5,7 +5,7 @@ const router = express.Router();
 //appel au contrôleur definissant les middlewares pour les utilisateurs
 const userCtrl = require('../controllers/user');
 //appel au middleware d'authentification
-const auth = require('../middlewares/auth');
+const auth = require('../middleware/auth');
 //méthodes des middlewares utilisateurs
 router.post('/signup', userCtrl.signup);
 router.post('/login', userCtrl.login);
