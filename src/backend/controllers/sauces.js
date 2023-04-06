@@ -1,5 +1,4 @@
 //appel au modèle mongoose de sauce
-const Sauces = require('../models/Sauces');
 const Sauce = require('../models/Sauces');
 //création de la fonction de création d'une sauce
 exports.createSauce = (req, res, next) => {
@@ -69,7 +68,7 @@ exports.getOneThing = (req, res, next) => {
 
 exports.getAllSauces = (req, res, next) => {
     Sauce.find()
-      .then(Sauces => res.status(200).json(sauces))
+      .then(sauces => res.status(200).json(sauces))
       .catch(error => res.status(400).json ({ error }));
     };
 
