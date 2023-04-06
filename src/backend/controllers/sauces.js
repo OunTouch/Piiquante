@@ -1,4 +1,5 @@
 //appel au modèle mongoose de sauce
+const Sauces = require('../models/Sauces');
 const Sauce = require('../models/Sauces');
 //création de la fonction de création d'une sauce
 exports.createSauce = (req, res, next) => {
@@ -21,12 +22,37 @@ exports.createSauce = (req, res, next) => {
     .catch(error => { res.status(400).json( { error })})
 };
 
+//création de la fonction de modification d'une sauce
+exports.modifySauce = (req, res, next) => {
+  //recherche d'un fichier
+  const sauceObject = req.file ? {
+      //traitement de la nouvelle image
+      ...JSON.parse(req.body.sauce),
+      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+  } : { ...req.body };
+
+  //remplacement de l'id client par l'id d'authentification
+  delete sauceObject._userId;
+  Sauce.findOne({_id: req.params.id})
+      .then((sauce) => {
+          //refus si les id ne correspondent pas
+          if (sauce.userId != req.auth.userId) {
+              res.status(401).json({ message : 'Not authorized'});
+          } else {
+              //mise à jour de l'image
+              Sauce.updateOne({ _id: req.params.id}, { ...sauceObject, _id: req.params.id})
+              .then(() => res.status(200).json({message : 'Sauce modifiée!'}))
+              .catch(error => res.status(401).json({ error }));
+          }
+      })
+      .catch((error) => {
+          res.status(400).json({ error });
+      });
+};
+
+
 /*
-exports.modifyThing = (req, res, next) => {
-    Thing.updateOne({_id: req.params.id}, { ...req.body, _id: req.params.id})
-      .then(() => res.status(200).json({ message: 'Objet modifié' }))
-      .catch(error => res.status(400).json ({ error }));
-  };
+
 
 exports.deleteThing = (req, res, next) => {
     Thing.deleteOne({_id: req.params.id})
@@ -39,11 +65,12 @@ exports.getOneThing = (req, res, next) => {
       .then(thing => res.status(200).json(thing))
       .catch(error => res.status(404).json ({ error }));
   };
+*/
 
-exports.getAllThings = (req, res, next) => {
-    Thing.find()
-      .then(things => res.status(200).json(things))
+exports.getAllSauces = (req, res, next) => {
+    Sauce.find()
+      .then(Sauces => res.status(200).json(sauces))
       .catch(error => res.status(400).json ({ error }));
     };
 
-    */
+  
