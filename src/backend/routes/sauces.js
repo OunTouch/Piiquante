@@ -14,10 +14,11 @@ router.get('/', auth, sauceCtrl.getAllSauces);
 
 //route pour poster une sauce
 router.post('/', auth, multer, sauceCtrl.createSauce);
-/*
+
 //route pour afficher une sauce
-router.get('/:id', auth, sauceCtrl.getOneSauce);
-*/
+/****IMPLEMENTER AUTH ET MULTER ****/
+router.get('/:id', sauceCtrl.getOneSauce);
+
 //route pour modifier une sauce
 router.put('/:id', auth, multer, sauceCtrl.modifySauce);
 /*

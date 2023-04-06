@@ -9,12 +9,12 @@ const userRoutes = require('./routes/user');
 const path = require('path');
 //appel à la base de donées
 const mongoose = require('mongoose');
-mongoose.connect('mongodb+srv://OunTouch:CX0BO7OVrc79CKCY@cluster0.z1ozurv.mongodb.net/?retryWrites=true&w=majority',
+mongoose.connect('mongodb+srv://OunTouch:JqwDj2UZyrhBBUv@piiquante.qwvg2n7.mongodb.net/?retryWrites=true&w=majority',
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
-
+  
 //utilisation du format json pour express
 app.use(express.json())
 
