@@ -11,12 +11,10 @@ const sauceSchema = mongoose.Schema({
   mainPepper: { type: String, required: true },
   imageUrl: { type: String, required: true },
   heat: { type: Number, required: true },
-  /* OU METTRE CE QUI SUIT
   likes: { type: Number, required: true },
   dislikes: { type: Number, required: true },
-  usersLiked: ["String<userId>"],
-  userDisliked: ["String<userId>"],
-  */
+  usersLiked: { type: Array, default:[] },
+  usersDisliked: { type: Array, default:[] },
 });
 /****REFAIRE LE MODELE DE DONNEES MONGOOSE ****/
 

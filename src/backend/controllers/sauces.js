@@ -63,6 +63,7 @@ exports.deleteThing = (req, res, next) => {
 
 /**BUUUUUUUUUUUUG **/
 exports.getOneSauce = (req, res, next) => {
+    console.log(Sauce);
     Sauce.findOne({_id: req.params.id})
       .then(sauce => res.status(200).json(sauce))
       .catch(error => res.status(404).json ({ error }));
