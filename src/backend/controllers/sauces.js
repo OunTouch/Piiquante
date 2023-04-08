@@ -1,5 +1,7 @@
 //appel au modèle mongoose de sauce
 const Sauce = require('../models/Sauces');
+//appel au package file system
+const fs = require('fs');
 //création de la fonction de création d'une sauce
 exports.createSauce = (req, res, next) => {
     //conversion de la requête en objet
@@ -49,27 +51,42 @@ exports.modifySauce = (req, res, next) => {
       });
 };
 
+//création de la fonction de suppression d'une sauce
+exports.deleteSauce = (req, res, next) => {
+    //accès à la sauce correspondante grâce à l'id
+    console.log(req);
+    Sauce.findOne({ _id: req.params.id})
+        .then(sauce => {
+            //correspondance entre l'id de l'image et l'id de son propriétaire
+            if (sauce.userId != req.auth.userId) {
+                res.status(401).json({message: 'Not authorized'});
+            } else {
+                //récupération du nom du fichier
+                const filename = sauce.imageUrl.split('/images/')[1];
+                console.log(filename);
+                //suppression du fichier
+                fs.unlink(`images/${filename}`, () => {
+                    Sauce.deleteOne({_id: req.params.id})
+                        .then(() => { res.status(200).json({message: 'Sauce supprimée !'})})
+                        .catch(error => res.status(401).json({ error }));
+                });
+            }
+        })
+        .catch( error => {
+            res.status(500).json({ error });
+        });
+ };
 
-/*
 
-
-exports.deleteThing = (req, res, next) => {
-    Thing.deleteOne({_id: req.params.id})
-      .then(() => res.status(200).json({ message : 'Objet supprimé'}))
-      .catch(error => res.status(404).json({ error }));
-  };
-
-  */
-
-/**BUUUUUUUUUUUUG **/
+ //création de la fonction d'affichage d'une sauce
 exports.getOneSauce = (req, res, next) => {
-    console.log(Sauce);
+    //récupération de la sauce grâce à son id
     Sauce.findOne({_id: req.params.id})
       .then(sauce => res.status(200).json(sauce))
       .catch(error => res.status(404).json ({ error }));
   };
-/**BUUUUUUUUUUUUG **/
 
+//création de la fonction d'affichage de toutes les sauces
 exports.getAllSauces = (req, res, next) => {
     Sauce.find()
       .then(sauces => res.status(200).json(sauces))

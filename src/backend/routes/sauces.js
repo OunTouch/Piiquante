@@ -21,10 +21,10 @@ router.get('/:id', auth, multer, sauceCtrl.getOneSauce);
 
 //route pour modifier une sauce
 router.put('/:id', auth, multer, sauceCtrl.modifySauce);
-/*
+
 //route pour supprimer une sauce
-router.delete('/:id', auth, sauceCtrl.deleteSauce);
-*/
+router.delete('/:id', auth, multer, sauceCtrl.deleteSauce);
+
 
 
 module.exports = router;
