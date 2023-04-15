@@ -8,6 +8,8 @@ const auth = require('../middleware/auth');
 const multer = require('../middleware/multer-config');
 //appel au contrôleur des sauces
 const sauceCtrl = require('../controllers/sauces');
+//appel au contrôleur des likes
+const like = require('../controllers/like');
 
 //route pour afficher toutes les sauces
 router.get('/', auth, sauceCtrl.getAllSauces);
@@ -25,6 +27,7 @@ router.put('/:id', auth, multer, sauceCtrl.modifySauce);
 //route pour supprimer une sauce
 router.delete('/:id', auth, multer, sauceCtrl.deleteSauce);
 
-
+//route pour liker une sauce
+router.post('/:id/like', auth, like.likeSauce);
 
 module.exports = router;
