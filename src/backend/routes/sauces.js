@@ -18,7 +18,6 @@ router.get('/', auth, sauceCtrl.getAllSauces);
 router.post('/', auth, multer, sauceCtrl.createSauce);
 
 //route pour afficher une sauce
-/****IMPLEMENTER AUTH ET MULTER ****/
 router.get('/:id', auth, multer, sauceCtrl.getOneSauce);
 
 //route pour modifier une sauce
