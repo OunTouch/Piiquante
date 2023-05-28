@@ -38,7 +38,7 @@ exports.modifySauce = (req, res, next) => {
       .then((sauce) => {
           //refus si les id ne correspondent pas
           if (sauce.userId != req.auth.userId) {
-              res.status(401).json({ message : 'Not authorized'});
+              res.status(403).json({ message : 'Not authorized'});
           } else {
               //mise à jour de l'image
               Sauce.updateOne({ _id: req.params.id}, { ...sauceObject, _id: req.params.id})
@@ -58,7 +58,7 @@ exports.deleteSauce = (req, res, next) => {
         .then(sauce => {
             //correspondance entre l'id de l'image et l'id de son propriétaire
             if (sauce.userId != req.auth.userId) {
-                res.status(401).json({message: 'Not authorized'});
+                res.status(403).json({message: 'Not authorized'});
             } else {
                 //récupération du nom du fichier
                 const filename = sauce.imageUrl.split('/images/')[1];
