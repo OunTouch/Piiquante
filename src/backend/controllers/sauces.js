@@ -2,6 +2,7 @@
 const Sauce = require('../models/Sauces');
 //appel au package file system
 const fs = require('fs');
+
 //création de la fonction de création d'une sauce
 exports.createSauce = (req, res, next) => {
     //conversion de la requête en objet
@@ -23,34 +24,44 @@ exports.createSauce = (req, res, next) => {
     .catch(error => { res.status(400).json( { error })})
 };
 
-//création de la fonction de modification d'une sauce
+//fonction de modification d'une sauce
 exports.modifySauce = (req, res, next) => {
-  //recherche d'un fichier
-  const sauceObject = req.file ? {
-      //traitement de la nouvelle image
+    // Vérification si un fichier est attaché à la requête
+    const sauceObject = req.file ? {
+      // Traitement de la nouvelle image
       ...JSON.parse(req.body.sauce),
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-  } : { ...req.body };
-
-  //remplacement de l'id client par l'id d'authentification
-  delete sauceObject._userId;
-  Sauce.findOne({_id: req.params.id})
+    } : { ...req.body };
+  
+    // Remplacement de l'id client par l'id d'authentification
+    delete sauceObject._userId;
+  
+    Sauce.findOne({ _id: req.params.id })
       .then((sauce) => {
-          //refus si les id ne correspondent pas
-          if (sauce.userId != req.auth.userId) {
-              res.status(403).json({ message : 'Not authorized'});
-          } else {
-              //mise à jour de l'image
-              Sauce.updateOne({ _id: req.params.id}, { ...sauceObject, _id: req.params.id})
-              .then(() => res.status(200).json({message : 'Sauce modifiée!'}))
-              .catch(error => res.status(401).json({ error }));
+        // Vérification si les ids ne correspondent pas
+        if (sauce.userId != req.auth.userId) {
+          res.status(403).json({ message: 'Not authorized' });
+        } else {
+          // Suppression de l'ancienne image si une nouvelle image est fournie
+          if (req.file) {
+            const filename = sauce.imageUrl.split("/images/")[1];
+            fs.unlink(`images/${filename}`, (error) => {
+              if (error) {
+                console.log('Erreur lors de la suppression de l\'image :', error);
+              }
+            });
           }
+  
+          // Mise à jour de l'image
+          Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
+            .then(() => res.status(200).json({ message: 'Sauce modifiée !' }))
+            .catch(error => res.status(401).json({ error }));
+        }
       })
       .catch((error) => {
-          res.status(400).json({ error });
+        res.status(400).json({ error });
       });
-};
-
+  };
 //création de la fonction de suppression d'une sauce
 exports.deleteSauce = (req, res, next) => {
     //accès à la sauce correspondante grâce à l'id
