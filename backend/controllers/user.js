@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/User');
 
+require('dotenv').config();
 
 
 //fonction d'enregistrement utilisateur
@@ -44,7 +45,7 @@ exports.login = (req, res, next) => {
                        userId: user._id,
                        token: jwt.sign(
                         { userId: user._id },
-                        'VbVrudrewNr4YcEoLf1BaeFcuCx1DKFykCyFtVyDUzNnHHo0eA9VxEYvcWTGIZT',
+                        process.env.JWT_TOKEN,
                         { expiresIn: '24h' }
                        )
                    });

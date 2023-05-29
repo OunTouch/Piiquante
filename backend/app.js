@@ -1,6 +1,8 @@
 //appel au package express
 const express = require('express');
 const app = express();
+//appel variables d'environnement
+require('dotenv').config();
 //appel au routeur des sauces
 const sauceRoutes = require('./routes/sauces');
 //appel au routeur des utilisateurs
@@ -9,7 +11,7 @@ const userRoutes = require('./routes/user');
 const path = require('path');
 //appel à la base de donées
 const mongoose = require('mongoose');
-mongoose.connect('mongodb+srv://OunTouch:JqwDj2UZyrhBBUv@piiquante.qwvg2n7.mongodb.net/?retryWrites=true&w=majority',
+mongoose.connect(process.env.MONGO_CONNECT,
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
